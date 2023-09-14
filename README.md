@@ -26,6 +26,10 @@ These temporary files/folders are created and destroyed in the process. Make sur
 
 ## Ubuntu specific lines used in this script
 This section provides hints for those who want to adapt this script for different setups
+
+### apt package manager (Debian based)
+Ubuntu is Debian based, which uses apt. You'll need to adapt the apt with pacman if you use arch from linux-vm-tools.
+
 ### linux-vm-tools
 The line
 ```
@@ -40,13 +44,12 @@ https://github.com/Hinara/linux-vm-tools
 browse for the correct script and replace the instances of install.sh with the intended script (or just rename the downloaded script for another architecture to install.sh)
 
 ### Run once on next login/boot
-This code is basically equivalent to creating an icon in the user's start menu folder in Windows except it's for Gnome, and make the icon self-destruct after launch:
-```
-echo -e "[Desktop Entry]\n\
-Type=Application\n\
-Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'\n\
-Name=startonce.desktop" > ~/.config/autostart/startonce.desktop
-```
+The blob of code containing
+'''
+[Desktop Entry]
+'''
+is basically equivalent to creating an icon in the user's start menu folder in Windows except it's for Gnome, and make the icon self-destruct after launch.
+
 If you don't have gnome-terminal, yet you use a XDG desktop specs compatible graphical desktop (aka the syntax above applies), you can replace gnome-terminal  with the GUI terminal you have.
 
 Basically it's just an idea of running a command like ~/linux-vm-tools/install.h once after reboot and clean up any scaffolding after the run.

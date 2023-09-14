@@ -62,9 +62,11 @@ sudo ./install.sh
 # The last 2 lines of screen output of install.sh tells you to reboot and run this again
 # This is automated below by making a icon in Gnome desktop's autostart folder
 # that will self-destruct after first launch
-echo -e "[Desktop Entry]\n\
-Type=Application\n\
-Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'\n\
-Name=startonce.desktop" > ~/.config/autostart/startonce.desktop
+cat > ~/.config/autostart/startonce.desktop <<EOF
+[Desktop Entry]
+Type=Application
+Name=startonce.desktop
+Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'
+EOF
 
 sudo reboot
