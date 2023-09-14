@@ -66,7 +66,7 @@ cat > ~/.config/autostart/startonce.desktop <<EOF
 [Desktop Entry]
 Type=Application
 Name=startonce.desktop
-Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'
+Exec=gnome-terminal -- sh -c '~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ~/.config/autostart/startonce.desktop; init 0'
 EOF
 
 sudo reboot

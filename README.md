@@ -8,6 +8,15 @@ https://wonghoi.humgar.com/blog/2023/09/13/getting-sound-to-work-ubuntu-vm-guest
 I confirmed that it works for a fresh install of Ubuntu 23.04 with Cinnamon VM
 as of 2023-09-14, specifically on Ubuntu Cinnamon Remix.
 
+## Prerequisites on Windows (Hyper-V Host) side
+You need to enable Hyper-V vsocket FOR THE SPECIFIC virtual machine first.
+To do so, open Powershell with ADMINISTRATIVE RIGHTS and enter
+```
+Set-VM {your VM's name} -EnhancedSessionTransportType HvSocket
+```
+Replace {your VM's name} with the name you gave to the VM in Hyper-V.
+Then REBOOT the Windows (host) computer.
+
 ## One-liner if you trust me
 ```
 wget https://raw.githubusercontent.com/wonghoi/enhanced_session_linux/main/setup_enhanced_session.sh -O - | sh
