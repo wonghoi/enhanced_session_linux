@@ -1,11 +1,13 @@
 # This script works on Ubuntu 23.04 with Cinnamon as of 2023-09-14
 # on freshly installed system.
 #
-# This code deletes ~/pulseaudio* and the folder ~/linux-vm-tools
-# so make sure you don't have anything matching in your home folder
-#
-# This script also creates ~/config/auto-start/startonce.desktop
-# so make sure you don't have anything with a colliding name
+# This script creates the following intermediaries
+# ~/pulseaudio-module-xrdp 
+# ~/pulseaudio.src 
+# ~/linux-vm-tools;
+# ~/.config/autostart/startonce.desktop
+# then deletes them. Make sure you don't have anything you want to keep named
+# as such
 #
 # The VM will shutdown after everything is done.
 # I chose to not reboot because I noticed if I reboot too fast
@@ -15,6 +17,17 @@
 # ON THE WINDOWS SIDE (Hyper-V Host)
 # ==================================
 # On Host's Powershell, "Set-VM {your VM's name} -EnhancedSessionTransportType HvSocket" AND reboot
+#
+# Hint for adapting it to other distributions
+# ===========================================
+# Replace gnome-terminal with graphical emulator that's available in your setup
+#
+# If you don't use Gnome-based desktop or XDG (base directory specs) compliant,
+# you can skip the long 'ecoh -e ...' line at the end that creates the autostart
+# icon and just manually reboot and run the ~/linux-vm-tools/install.sh again
+# then reboot and clean up the temporary/intermediary folders/files mentioned
+# above
+
 
 # Change audio server in Ubuntu
 sudo apt -y update
@@ -26,7 +39,7 @@ systemctl --user enable --now pulseaudio.service pulseaudio.socket
 pactl info
 
 # Build pulseaudio-module-xrdp and install the kernel modules
-# The official instructions assumes home folder
+# Stick with official instructions which assumes home folder
 cd ~
 sudo apt -y install build-essential dpkg-dev libpulse-dev git autoconf libtool
 git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git
@@ -46,12 +59,12 @@ wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/
 sudo chmod +x install.sh
 sudo ./install.sh
 
-# The last 2 lines of screen output of install.sh  tells you to reboot and run this again
+# The last 2 lines of screen output of install.sh tells you to reboot and run this again
 # This is automated below by making a icon in Gnome desktop's autostart folder
-# that  will self-destruct after first launch
+# that will self-destruct after first launch
 echo -e "[Desktop Entry]\n\
 Type=Application\n\
-Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; sudo rm -rf ~/pulseaudio*; sudo rm -rf ~/linux-vm-tools; init 0'\n\
+Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'\n\
 Name=startonce.desktop" > ~/.config/autostart/startonce.desktop
 
 sudo reboot

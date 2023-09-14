@@ -15,5 +15,40 @@ wget https://raw.githubusercontent.com/wonghoi/enhanced_session_linux/main/setup
 
 Otherwise inspect the code and its dependencies for shenanigans, chmod +x to make the downloaded file executable, and run it
 
+## Intermediary files created
+These temporary files/folders are created and destroyed in the process. Make sure nothing gets in its way.
+```
+~/pulseaudio-module-xrdp 
+~/pulseaudio.src 
+~/linux-vm-tools;
+~/.config/autostart/startonce.desktop
+```
 
+## Ubuntu specific lines used in this script
+This section provides hints for those who want to adapt this script for different setups
+### linux-vm-tools
+The line
+```
+wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
+```
+pulls the version specific to Ubuntu 22.04. They also support arch Linux.
 
+You can go to 
+```
+https://github.com/Hinara/linux-vm-tools
+```
+browse for the correct script and replace the instances of install.sh with the intended script (or just rename the downloaded script for another architecture to install.sh)
+
+### Run once on next login/boot
+This code is basically equivalent to creating an icon in the user's start menu folder in Windows except it's for Gnome, and make the icon self-destruct after launch:
+```
+echo -e "[Desktop Entry]\n\
+Type=Application\n\
+Exec=gnome-terminal -- sh -c 'rm ~/.config/autostart/startonce.desktop; sudo ~/linux-vm-tools/install.sh; rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools; init 0'\n\
+Name=startonce.desktop" > ~/.config/autostart/startonce.desktop
+```
+If you don't have gnome-terminal, yet you use a XDG desktop specs compatible graphical desktop (aka the syntax above applies), you can replace gnome-terminal  with the GUI terminal you have.
+
+Basically it's just an idea of running a command like ~/linux-vm-tools/install.h once after reboot and clean up any scaffolding after the run.
+
+It's an overly complicated manuever that most people don't want to invest their time to research. If you are fine with manual work rebooting and restarting ~/linux-vm-tools/install.sh the second time. You can simply skip this and delete the files mentioned in the "Intermediary files created" section above after you are done with this script.
