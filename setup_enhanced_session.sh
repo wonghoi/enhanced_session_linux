@@ -9,6 +9,9 @@
 # then deletes them. Make sure you don't have anything you want to keep named
 # as such
 #
+# This script will force install gnome-terminal
+# If you hate its guts, you can do a "sudo apt purge gnome-terminal" later
+#
 # The VM will shutdown after everything is done.
 # I chose to not reboot because I noticed if I reboot too fast
 # the Enhanced Session is not ready yet so it needs to be rebooted again
@@ -70,8 +73,12 @@ mkdir -p ~/.config/autostart/
 
 RUN_ONCE_ICON_FILE=~/.config/autostart/startonce.desktop
 
-sudo apt -y install neofetch
-GRAPHICAL_TERM=$(neofetch term | sed "s/term: //g")
+# Stopped autodetecting as it's messy to manage different command switches
+# Force install gnome-terminal for consistency
+sudo apt -y install gnome-terminal
+GRAPHICAL_TERM=gnome-terminal
+#sudo apt -y install neofetch
+#GRAPHICAL_TERM=$(neofetch term | sed "s/term: //g")
 
 cat > ${RUN_ONCE_ICON_FILE} <<EOF
 [Desktop Entry]
