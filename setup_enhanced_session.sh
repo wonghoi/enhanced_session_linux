@@ -81,7 +81,7 @@ cat > ${RUN_ONCE_ICON_FILE} <<EOF
 [Desktop Entry]
 Type=Application
 Name=startonce.desktop
-Exec=gnome-terminal -- "sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ${RUN_ONCE_ICON_FILE} && sudo init 0;\$SHELL'"
+Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ${RUN_ONCE_ICON_FILE} && sudo init 0;\$SHELL'
 EOF
 
 sudo reboot
