@@ -76,15 +76,12 @@ RUN_ONCE_ICON_FILE=~/.config/autostart/startonce.desktop
 # Stopped autodetecting as it's messy to manage different command switches
 # Force install gnome-terminal for consistency
 sudo apt -y install gnome-terminal
-GRAPHICAL_TERM=gnome-terminal
-#sudo apt -y install neofetch
-#GRAPHICAL_TERM=$(neofetch term | sed "s/term: //g")
 
 cat > ${RUN_ONCE_ICON_FILE} <<EOF
 [Desktop Entry]
 Type=Application
 Name=startonce.desktop
-Exec=${GRAPHICAL_TERM} -e 'sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ${RUN_ONCE_ICON_FILE} && sudo init 0;\$SHELL''
+Exec=gnome-terminal -- "sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ${RUN_ONCE_ICON_FILE} && sudo init 0;\$SHELL'"
 EOF
 
 sudo reboot
