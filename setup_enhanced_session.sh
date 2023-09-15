@@ -54,7 +54,8 @@ ls $(pkg-config --variable=modlibexecdir libpulse) | grep xrdp
 
 # Install linux-vm-tools which enables Enhanced Session
 # Give linux-vm-tools its own folder to avoid confusion
-mkdir -p ~/linux-vm-tools && cd $_
+mkdir -p ~/linux-vm-tools 
+cd ~/linux-vm-tools 
 wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
 sudo chmod +x install.sh
 sudo ./install.sh
@@ -66,8 +67,7 @@ cat > ~/.config/autostart/startonce.desktop <<EOF
 [Desktop Entry]
 Type=Application
 Name=startonce.desktop
-Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh; $SHELL'
+Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ~/.config/autostart/startonce.desktop && init 0;$SHELL'
 EOF
 
-#Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ~/.config/autostart/startonce.desktop && init 0;
-#sudo reboot
+sudo reboot
