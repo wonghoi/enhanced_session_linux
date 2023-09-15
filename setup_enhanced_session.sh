@@ -63,6 +63,10 @@ sudo ./install.sh
 # The last 2 lines of screen output of install.sh tells you to reboot and run this again
 # This is automated below by making a icon in Gnome desktop's autostart folder
 # that will self-destruct after first launch
+#
+# Turns out PopOS and debian do not have autostart folder created by default
+# but they will honor it if created
+mkdir -p ~/.config/autostart/
 cat > ~/.config/autostart/startonce.desktop <<EOF
 [Desktop Entry]
 Type=Application
