@@ -1,6 +1,9 @@
 # This script works on Ubuntu 23.04 with Cinnamon as of 2023-09-14
 # on freshly installed system.
 #
+# This script (along with the core dependency in linux-vm-tools), uses
+# systemctl which requires systemd.
+#
 # This script creates the following intermediaries
 # ~/pulseaudio-module-xrdp 
 # ~/pulseaudio.src 
@@ -31,6 +34,11 @@
 # then reboot and clean up the temporary/intermediary folders/files mentioned
 # above
 
+if [ $(ps --no-headers -o comm 1) != "systemd" ]; then
+	echo "This script depends on systemd (systemctl)"
+	echo "If you are using MX Linux, you can switch to systemd by 'sudo apt install systemd-sysv'"
+	exit 1
+fi
 
 # Change audio server in Ubuntu
 sudo apt -y update

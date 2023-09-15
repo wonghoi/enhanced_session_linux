@@ -37,6 +37,10 @@ These temporary files/folders are created and destroyed in the process. Make sur
 ## Ubuntu specific lines used in this script
 This section provides hints for those who want to adapt this script for different setups
 
+### Depends on systemd (systemctl)
+Not just my code starting pulseaudio, but linux-vm-tool uses it as well.
+Ubuntu defaults to systemd for now
+
 ### apt package manager (Debian based)
 Ubuntu is Debian based, which uses apt. You'll need to adapt the apt with pacman if you use arch from linux-vm-tools.
 
@@ -65,3 +69,11 @@ If you don't have gnome-terminal, yet you use a XDG desktop specs compatible gra
 Basically it's just an idea of running a command like ~/linux-vm-tools/install.h once after reboot and clean up any scaffolding after the run.
 
 It's an overly complicated manuever that most people don't want to invest their time to research. If you are fine with manual work rebooting and restarting ~/linux-vm-tools/install.sh the second time. You can simply skip this and delete the files mentioned in the "Intermediary files created" section above after you are done with this script.
+
+### Tested non-Ubuntu distros
+- **PopOS**: No go. Gnome crashes when accessed through xrdp. (pop-os_22.04_amd64_intel_34)
+- **MX Linux**: No go. It's stuck at with a blank screen after xrdp's sesman login (MX-23_x64)
+- **Debian**: magically it worked with sound in a few desktop envrionments before even running a second pass of ~/linux-vm-tools/install.sh. I had to make a lot of change to the robustness of this code to accomodate it
+
+I'm not going to waste my time hacking the distros that do not jive with xrdp at all since Ubuntu/Debian proved that these can be fixed on the linux's end. It's not even a PulseAudio problem (purely xrdp hell) so although my code might accommodate MX Linux, know that out of the box it doesn't work as of 2023-09-15.
+
