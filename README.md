@@ -74,6 +74,7 @@ It's an overly complicated manuever that most people don't want to invest their 
 - **PopOS**: No go. Gnome crashes when accessed through xrdp. (pop-os_22.04_amd64_intel_34)
 - **MX Linux**: No go. It's stuck at with a blank screen after xrdp's sesman login (MX-23_x64)
 - **Debian**: magically it worked with sound in a few desktop envrionments before even running a second pass of ~/linux-vm-tools/install.sh. I had to make a lot of change to the robustness of this code to accomodate it
+- **Lubuntu**: This one requires source repo to be enabled or else it will choke install_pulseaudio_sources_apt_wrapper.sh and the script moves on silently, leaving sound not working. See the deprecated section about it on my blog
 
 I'm not going to waste my time hacking the distros that do not jive with xrdp at all since Ubuntu/Debian proved that these can be fixed on the linux's end. It's not even a PulseAudio problem (purely xrdp hell) so although my code might accommodate MX Linux, know that out of the box it doesn't work as of 2023-09-15.
 
