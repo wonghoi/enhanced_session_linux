@@ -67,11 +67,18 @@ sudo ./install.sh
 # Turns out PopOS and debian do not have autostart folder created by default
 # but they will honor it if created
 mkdir -p ~/.config/autostart/
-cat > ~/.config/autostart/startonce.desktop <<EOF
+
+RUN_ONCE_ICON_FILE=~/.config/autostart/startonce.desktop
+
+sudo apt -y install neofetch
+GRAPHICAL_TERM=$(neofetch term | sed "s/term: //g")
+
+cat > ${RUN_ONCE_ICON_FILE} <<EOF
 [Desktop Entry]
 Type=Application
 Name=startonce.desktop
-Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ~/.config/autostart/startonce.desktop && init 0;$SHELL'
+Exec=${GRAPHICAL_TERM} -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulseaudio-module-xrdp ~/pulseaudio.src ~/linux-vm-tools ${RUN_ONCE_ICON_FILE} && init 0;\$SHELL'
 EOF
 
 sudo reboot
+
