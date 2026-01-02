@@ -16,14 +16,21 @@ To do so, open Powershell with **administrative rights** and enter this:
 Set-VM {your VM's name} -EnhancedSessionTransportType HvSocket
 ```
 Replace {your VM's name} with the name you gave to the VM in Hyper-V.
-Then **reboot** the Windows (host) computer.
+
+Changes are not reflected until the Hyper-V's core is restarted. 
+The easiest way is to **Reboot** the Windows (host) computer,
+but you can just restart Hyper-V Host Compute Service (vmcompute) services
+through services.msc or run this line in **Powershell**
+```
+Restart-Service -Name vmcompute -Force
+```
 
 ## One-liner if you trust me
 ```
 wget https://raw.githubusercontent.com/wonghoi/enhanced_session_linux/main/setup_enhanced_session.sh -O - | sh
 ```
 
-Otherwise inspect the code and its dependencies for shenanigans, chmod +x to make the downloaded file executable, and run it
+Otherwise inspect the code and its dependencies for shenanigans, `chmod +x` to make the downloaded file executable, and run it
 
 ## Intermediary files created
 These temporary files/folders are created and destroyed in the process. Make sure nothing gets in its way.
@@ -47,15 +54,19 @@ Ubuntu is Debian based, which uses apt. You'll need to adapt the apt with pacman
 ### linux-vm-tools
 The line
 ```
-wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
+wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/refs/heads/master/ubuntu/24.04/install.sh
 ```
-pulls the version specific to Ubuntu 22.04. They also support arch Linux.
+pulls the version specific to Ubuntu 22.04. I diffed the install.h in /24.04 against /22.04 and realized
+the only change is making the `cat` output file redirection more robust by making sure the output folder already exist
 
 You can go to 
 ```
 https://github.com/Hinara/linux-vm-tools
 ```
 browse for the correct script and replace the instances of install.sh with the intended script (or just rename the downloaded script for another architecture to install.sh)
+
+`linux-tools-virtual` and `linux-cloud-tools-virtual` is Ubuntu specific. 
+Debian already covered it in `linux-tools-common` and `linux-tools-generic` so you can ignore the apt error messages trying to find non-existent packages
 
 ### Run once on next login/boot
 The blob of code containing
