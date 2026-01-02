@@ -67,8 +67,7 @@ ls $(pkg-config --variable=modlibexecdir libpulse) | grep xrdp
 # Give linux-vm-tools its own folder to avoid confusion
 mkdir -p ~/linux-vm-tools 
 cd ~/linux-vm-tools 
-#wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
-wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/refs/heads/master/ubuntu/24.04/install.sh
+wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
 sudo chmod +x install.sh
 sudo ./install.sh
 
