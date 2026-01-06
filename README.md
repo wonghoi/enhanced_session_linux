@@ -59,7 +59,7 @@ for GNOME (works for Debian despite it's intended for and named as Ubuntu).
 Ubuntu 25.10 comes with GNOME 49 by default. 
 GNOME 49 disabled X11 and used Wayland by default. 
 Moving on, X11 will be gone since GNOME 50, which means it's not just Ubuntu,
-many modern linux distros will ship without a X11.
+many modern linux distros will ship without an X11.
 
 xrdp requires X11 to work. So far I've yet to see X11 work on Wayland.
 
@@ -70,7 +70,7 @@ to get sound in RDP:
 ```
 sudo apt install pipewire
 ```
-I tried pulseauio and it worked for GNOME Desktop too. 
+I tried pulseaudio and it worked for GNOME Desktop too. 
 
 As of 2026 we are in a limbo because GNOME 49+ disabled X11,
 which is required to make xrdp, the only RDP with vsocks needed
@@ -93,7 +93,7 @@ GNOME Remote Desktop that's tightly integrated with GNOME and live with
 the network protocol overhead.
 
 Cinnamon (based on GNOME 3) still supports X11 (they are still experimenting with Wayland)
-so xrdp works with it. If you use Linux Minut, UCR (Ubuntu Cinnamon Remix),
+so xrdp works with it. If you use Linux Mint, UCR (Ubuntu Cinnamon Remix),
 or Debian with Cinnamon chosen as the only Desktop Environment in the installer,
 you will get X11 out of the box so xrdp and this script would work.
 
