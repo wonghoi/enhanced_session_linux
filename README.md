@@ -82,7 +82,7 @@ I tried pulseaudio and it worked for GNOME Desktop too.
 
 As of 2026 we are in a limbo because GNOME 49+ disabled X11,
 which is required to make xrdp the only RDP with vsocks needed
-for Enhanced Session), work yet GNOME 49+'s better RDP is not vsocks-ready.
+for Enhanced Session, work yet GNOME 49+'s better RDP is not vsocks-ready.
 This means more and more new Linux distros out of the box won't work with 
 Enhanced Session without much wrestling after installation.
 
