@@ -40,6 +40,13 @@ if [ $(ps --no-headers -o comm 1) != "systemd" ]; then
 	exit 1
 fi
 
+if [ $XDG_SESSION_TYPE != "x11" ]; then
+	echo "This script is based on xrdp which only works on x11"
+	echo "xrdp doesn't work with Wayland yet"
+	echo "Consider VMware, not using GNOME 49 and above, or run the linux headless on Hyper-V then connect to the VM through actual network IP"
+	exit 1
+fi
+
 # Change audio server in Ubuntu
 sudo apt -y update
 sudo apt -y purge pipewire
