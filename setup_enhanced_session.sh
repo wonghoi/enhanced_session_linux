@@ -65,7 +65,7 @@ replace_pipewire_with_pulse_audio
 pactl info
 
 # Install RDP
-sudo apt -y xrdp
+sudo apt -y install xrdp
 
 # RDP must configure ~/.xsession per user
 print_available_xsessions() {
