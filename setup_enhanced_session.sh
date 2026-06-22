@@ -10,6 +10,8 @@
 # not call the workable launcher for the desktop environment (DE) you picked.
 # I added a tool here to force you to pick one now instead of getting confused later.
 #
+#!/bin/bash
+
 # This script creates the following intermediaries
 # ~/pulseaudio-module-xrdp 
 # ~/pulseaudio.src 
@@ -84,6 +86,7 @@ xsession_menu() {
 	DESKTOPS=$(print_available_xsessions)
 	nl <<< $DESKTOPS
 	read -rp "Line: " -n 1 SELECTED_LINE
+	echo
 	
 	DESKTOP=$(sed -n $(echo ${SELECTED_LINE}p) <<< $DESKTOPS)
 	echo $DESKTOP > ~/.xsession
