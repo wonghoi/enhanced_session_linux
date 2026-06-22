@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # This script works on Ubuntu 26.04 with Cinnamon as of 2026-06-22
 # on freshly installed UCR (Ubuntu Cinnamon Remix 26.04 LTS).
 #
@@ -10,8 +12,6 @@
 # not call the workable launcher for the desktop environment (DE) you picked.
 # I added a tool here to force you to pick one now instead of getting confused later.
 #
-#!/bin/bash
-
 # This script creates the following intermediaries
 # ~/pulseaudio-module-xrdp 
 # ~/pulseaudio.src 
