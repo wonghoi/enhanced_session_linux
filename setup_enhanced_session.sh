@@ -1,8 +1,14 @@
-# This script works on Ubuntu 23.04 with Cinnamon as of 2023-09-14
-# on freshly installed system.
+# This script works on Ubuntu 26.04 with Cinnamon as of 2026-06-22
+# on freshly installed UCR (Ubuntu Cinnamon Remix 26.04 LTS).
 #
-# This script (along with the core dependency in linux-vm-tools), uses
-# systemctl which requires systemd.
+# This script (along with the core dependency in linux-vm-tools), 
+# uses systemctl which requires systemd.
+#
+# The whole idea of enhanced session is tunnel everything through RDP.
+# GNOME 50's native RDP do not talk to Hyper-V through a backdoor like xrdp
+# One of xrdp's quirks is that you'll get a session crash if ~/.xsession do
+# not call the workable launcher for the desktop environment (DE) you picked.
+# I added a tool here to force you to pick one now instead of getting confused later.
 #
 # This script creates the following intermediaries
 # ~/pulseaudio-module-xrdp 
@@ -29,7 +35,7 @@
 # Replace gnome-terminal with graphical emulator that's available in your setup
 #
 # If you don't use Gnome-based desktop or XDG (base directory specs) compliant,
-# you can skip the long 'ecoh -e ...' line at the end that creates the autostart
+# you can skip the long 'echo -e ...' line at the end that creates the autostart
 # icon and just manually reboot and run the ~/linux-vm-tools/install.sh again
 # then reboot and clean up the temporary/intermediary folders/files mentioned
 # above
@@ -48,36 +54,70 @@ if [ $XDG_SESSION_TYPE != "x11" ]; then
 fi
 
 # Change audio server in Ubuntu
-sudo apt -y update
-sudo apt -y purge pipewire
-sudo apt -y install pulseaudio pavucontrol xrdp
-systemctl --user enable --now pulseaudio.service pulseaudio.socket
-
+replace_pipewire_with_pulse_audio() {
+	sudo apt -y update
+	sudo apt -y purge pipewire
+	sudo apt -y install pulseaudio pavucontrol
+	systemctl --user enable --now pulseaudio.service pulseaudio.socket
+}
+replace_pipewire_with_pulse_audio
 # [Optional] check if PulseAudio was installed correctly
 pactl info
 
-# Build pulseaudio-module-xrdp and install the kernel modules
-# Stick with official instructions which assumes home folder
-cd ~
-sudo apt -y install build-essential dpkg-dev libpulse-dev git autoconf libtool
-git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git
-cd pulseaudio-module-xrdp
-./scripts/install_pulseaudio_sources_apt_wrapper.sh
-./bootstrap && ./configure PULSE_DIR=$HOME/pulseaudio.src
-make
-sudo make install
+# Install RDP
+sudo apt -y xrdp
 
+# RDP must configure ~/.xsession per user
+print_available_xsessions() {
+# Pluck out the desktop session starter commands from the "Exec=" lines
+# \K: exclude the searched string from results (eat up what's parsed so far)
+# .* match everything after the search string
+# ^ make sure the line starts with the search string (don't want TryExec=)
+# -oP regexp (Perl style)
+# -h do not mention filename
+# -v throws away the line "default" (placeholder)
+	grep -ohP "^Exec=\K.*" /usr/share/xsessions/*.desktop | grep -v "default"
+}
+xsession_menu() {
+	echo "xrdp reads ~/.xsession to load the correct desktop. If you don't specify it, the hyper-v client will disconnect after xrdp login"
+	echo "Please select your xrdp desktop by line number:"
+	DESKTOPS=$(print_available_xsessions)
+	nl <<< $DESKTOPS
+	read -rp "Line: " -n 1 SELECTED_LINE
+	
+	DESKTOP=$(sed -n $(echo ${SELECTED_LINE}p) <<< $DESKTOPS)
+	echo $DESKTOP > ~/.xsession
+	chmod +x ~/.xsession
+}
+xsession_menu
+
+compile_and_install_pulseaudio_module_xrdp() {
+	# Build pulseaudio-module-xrdp and install the kernel modules
+	# Stick with official instructions which assumes home folder
+	cd ~
+	sudo apt -y install build-essential dpkg-dev libpulse-dev git autoconf libtool
+	git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git
+	cd pulseaudio-module-xrdp
+	./scripts/install_pulseaudio_sources_apt_wrapper.sh
+	./bootstrap && ./configure PULSE_DIR=$HOME/pulseaudio.src
+	make
+	sudo make install
+}
+compile_and_install_pulseaudio_module_xrdp
 # [Optional] check if pulseaudio-module-xrdp was installed correctly
 ls $(pkg-config --variable=modlibexecdir libpulse) | grep xrdp
 
-# Install linux-vm-tools which enables Enhanced Session
-# Give linux-vm-tools its own folder to avoid confusion
-mkdir -p ~/linux-vm-tools 
-cd ~/linux-vm-tools 
-#wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
-wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/refs/heads/master/ubuntu/24.04/install.sh
-sudo chmod +x install.sh
-sudo ./install.sh
+install_linux_vm_tools() {
+	# Install linux-vm-tools which enables Enhanced Session
+	# Give linux-vm-tools its own folder to avoid confusion
+	mkdir -p ~/linux-vm-tools 
+	cd ~/linux-vm-tools 
+	#wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/ubuntu20-04/ubuntu/22.04/install.sh
+	wget https://raw.githubusercontent.com/Hinara/linux-vm-tools/refs/heads/master/ubuntu/24.04/install.sh
+	sudo chmod +x install.sh
+	sudo ./install.sh
+}
+install_linux_vm_tools
 
 # The last 2 lines of screen output of install.sh tells you to reboot and run this again
 # This is automated below by making a icon in Gnome desktop's autostart folder
@@ -86,7 +126,6 @@ sudo ./install.sh
 # Turns out PopOS and debian do not have autostart folder created by default
 # but they will honor it if created
 mkdir -p ~/.config/autostart/
-
 RUN_ONCE_ICON_FILE=~/.config/autostart/startonce.desktop
 
 # Stopped autodetecting as it's messy to manage different command switches
@@ -101,4 +140,3 @@ Exec=gnome-terminal -- sh -c 'sudo ~/linux-vm-tools/install.sh && rm -rf ~/pulse
 EOF
 
 sudo reboot
-
