@@ -127,7 +127,7 @@ Restart-Service -Name vmcompute -Force
 ## One-liner if you trust me
 
 ```
-wget https://raw.githubusercontent.com/wonghoi/enhanced_session_linux/main/setup_enhanced_session.sh -O - | sh
+wget https://raw.githubusercontent.com/wonghoi/enhanced_session_linux/main/setup_enhanced_session.sh -O - | bash
 ```
 
 Otherwise inspect the code and its dependencies for shenanigans, `chmod +x` to make the downloaded file executable, and run it
