@@ -131,7 +131,7 @@ install_linux_vm_tools
 mkdir -p ~/.config/autostart/
 RUN_ONCE_ICON_FILE=~/.config/autostart/startonce.desktop
 
-# Stopped autodetecting as it's messy to manage different command switches
+# Stopped autodetecting terminal software as it's messy to manage different command switches
 # Force install gnome-terminal for consistency
 sudo apt -y install gnome-terminal
 
